@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import userPhoto from "../Images/user.png";
 import { Dropdown } from "react-bootstrap";
 import {FaUser, FaMoneyCheckAlt, FaSignOutAlt, FaVideo} from 'react-icons/fa'
+import {UserContext} from '../context/UserContext'
+import { useContext } from "react";
 
 
 function Navbar() {
@@ -16,22 +18,23 @@ function Navbar() {
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [state, dispatch] = useContext(UserContext)
+  const user = localStorage.getItem('token')
 
   const [isLogin, setIsLogin] = useState(false);
 
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem("user")
+    localStorage.removeItem("token")
     navigate('/')
   }
 
   useEffect(() => {
-    if (user) setIsLogin(true);
-    else setIsLogin(false)
-  }, [user, handleLogout]);
+    if (user){
+      setIsLogin(true)
+    } else setIsLogin(false)
+  }, [state, handleLogout]);
   
 
 

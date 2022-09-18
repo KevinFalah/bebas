@@ -165,3 +165,18 @@ input[type="file"] {
   justify-content: space-between;
   cursor: pointer;
 }
+
+.labelThumbnail {
+  background-color: white !important;
+  color: black !important;
+  height: 50px;
+  gap: 10px;
+  width: 100%;
+  line-height: 50px;
+  text-align: left;
+  padding: 0 25px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}

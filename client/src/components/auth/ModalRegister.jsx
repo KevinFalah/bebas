@@ -5,13 +5,16 @@ import Modal from 'react-bootstrap/Modal';
 import { UserContext } from '../../context/UserContext';
 import { useMutation } from 'react-query';
 import {Alert} from 'react-bootstrap'
-import API  from '../../config/api';
+import {API}  from '../../config/api';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function ModalRegister( {handleClose, show} ) {
     const [isRegister, setIsRegister] = useState(true)
   
+    const navigate = useNavigate()
+
     const [state, dispatch] = useContext(UserContext);
   
     const [message, setMessage] = useState(null);
@@ -40,18 +43,20 @@ function ModalRegister( {handleClose, show} ) {
         // Configuration Content-type
         const config = {
           headers: {
-            'Content-type': 'application/json',
+            'content-type': 'application/json',
           },
         };
   
-        // Data body
+        if (isRegister) {
+          // Data body
         const body = JSON.stringify(form);
         // Insert data user to database
-        const response = await API.get('/film/2/episodes');
+        const response = await API.post('/register', body, config);
         console.log(response)
+       
   
         // Notification
-        if (response.data.status === 'success...') {
+        if (response.data.code === 200) {
           const alert = (
             <Alert variant="success" className="py-1">
               Success
@@ -66,6 +71,8 @@ function ModalRegister( {handleClose, show} ) {
             phone: "",
             address: ""
           });
+
+          switchRegister()
         } else {
           const alert = (
             <Alert variant="danger" className="py-1">
@@ -73,6 +80,41 @@ function ModalRegister( {handleClose, show} ) {
             </Alert>
           );
           setMessage(alert);
+        }
+        } else {
+        // Data body
+        const body = JSON.stringify(form);
+        // Insert data user to database
+        const response = await API.post('/login', body, config);
+        console.log(response)
+       
+        // Notification
+        if (response.data.code === 200) {
+          dispatch({
+            type:"LOGIN_SUCCESS",
+            payload: response.data.data
+          })
+          const alert = (
+            <Alert variant="success" className="py-1">
+              Success
+            </Alert>
+          );
+          setMessage(alert);
+          setForm({
+            fullname: "",
+            email: "",
+            password: "",
+          });
+        } else {
+          const alert = (
+            <Alert variant="danger" className="py-1">
+              Failed
+            </Alert>
+          );
+          setMessage(alert);
+        }
+        navigate('/')
+        handleClose()
         }
       } catch (error) {
         const alert = (

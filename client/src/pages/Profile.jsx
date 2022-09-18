@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import {
   FaEnvelope,
   FaFemale,
@@ -9,9 +9,14 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import {Container, Row, Col, Card, Button} from 'react-bootstrap'
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import profileUser from '../Images/profileUser.png'
+import {UserContext} from '../context/UserContext'
+import axios from 'axios';
+import {API} from '../config/api'
+import {useQuery} from 'react-query'
+
+
 const initialUser = {
   email: "",
   password: "",
@@ -20,34 +25,35 @@ const initialUser = {
   phone: "",
   address: ""
 }
+
+
+
 function Profile() {
 
-  const [isLogin, setIsLogin] = useState(false)
+  const [state, dispatch] = useContext(UserContext)
   const [userData, setUserData] = useState(initialUser)
 
-  const user = JSON.parse(localStorage.getItem('user'))
+  const users = localStorage.getItem('token')
 
   const navigate = useNavigate()
+  let id = state.user.id
+  
+  let { data: user } = useQuery('userCache', async () => {
+    const response = await API.get(`/user/${id}`);
+    return response.data.data;
+  });
+  console.log(user)
 
   useEffect(()=> {
-    if(user){
-      setIsLogin(true)
-      setUserData({
-        ...userData,
-        email: user?.email,
-        password: user?.password,
-        fullname: user?.fullname,
-        gender: user?.gender,
-        phone: user?.phone,
-        address: user?.address
+
+    if(!users){
+      dispatch({
+        type: 'LOGOUT'
       })
-    }
-    else{
-      setIsLogin(false)
       setUserData(initialUser)
       navigate('/')
     }
-  }, [user, isLogin])
+  }, [users, state.isLogin])
   
 
   return (
@@ -63,7 +69,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaUserCircle className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.fullname}</h5>
+                    <h5>{user.full_name}</h5>
                     <p className="text-muted">Full Name</p>
                   </div>
                 </div>
@@ -71,7 +77,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaEnvelope className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.email}</h5>
+                    <h5>{user.email}</h5>
                     <p className="text-muted">Email Address</p>
                   </div>
                 </div>
@@ -79,19 +85,19 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaRegMoneyBillAlt className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.status}Active</h5>
+                    <h5>{user.status}Active</h5>
                     <p className="text-muted">Status</p>
                   </div>
                 </div>
                 {/* Gender */}
                 <div className="d-flex mb-3 align-items-start">
-                  {userData.gender === "Male" ? (
+                  {user.gender === "Male" ? (
                     <FaMale className="text-danger me-3 fs-1" />
                   ) : (
                     <FaFemale className="text-danger me-3 fs-1" />
                   )}
                   <div>
-                    <h5>{userData.gender}</h5>
+                    <h5>{user.gender}</h5>
                     <p className="text-muted">Gender</p>
                   </div>
                 </div>
@@ -99,7 +105,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaPhone className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.phone}</h5>
+                    <h5>{user.phone}</h5>
                     <p className="text-muted">Phone Number</p>
                   </div>
                 </div>
@@ -107,7 +113,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaMapMarked className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.address}</h5>
+                    <h5>{user.address}</h5>
                     <p className="text-muted">Address</p>
                   </div>
                 </div>

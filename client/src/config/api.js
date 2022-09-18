@@ -1,12 +1,14 @@
 import axios from 'axios'
 
-const API = axios.create({
-    baseUrl: "http://localhost:3000/api/v1/",
-    withCredentials: true,
+export const API = axios.create({
+    baseURL: "http://localhost:5000/api/v1/",
 })
 
-API.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-API.defaults.withCredentials = true;
-API.defaults.crossDomain = true;
 
-export default API
+export const setAuthToken = (token) => {
+    if (token) {
+      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete API.defaults.headers.common['Authorization'];
+    }
+  };
