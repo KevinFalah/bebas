@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/mux"
 )
 
@@ -38,9 +39,10 @@ func (h *handlerUser) FindUsers(w http.ResponseWriter, r *http.Request) {
 func (h *handlerUser) GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	userInfo := r.Context().Value("userInfo").(jwt.MapClaims)
+	userId := int(userInfo["id"].(float64))
 
-	user, err := h.UserRepository.GetUser(id)
+	user, err := h.UserRepository.GetUser(userId)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
@@ -48,8 +50,16 @@ func (h *handlerUser) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userResponse := usersdto.UserResponse{
+		Fullname: user.FullName,
+		Email: user.Email,
+		Gender: user.Gender,
+		Phone: user.Phone,
+		Address: user.Address,
+	}
+
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: user}
+	response := dto.SuccessResult{Code: http.StatusOK, Data: userResponse}
 	json.NewEncoder(w).Encode(response)
 }
 

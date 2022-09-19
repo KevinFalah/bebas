@@ -18,12 +18,12 @@ import {useQuery} from 'react-query'
 
 
 const initialUser = {
-  email: "",
-  password: "",
   fullname: "",
+  email: "",
   gender: "",
   phone: "",
-  address: ""
+  address: "",
+  subscribe: false
 }
 
 
@@ -32,17 +32,19 @@ function Profile() {
 
   const [state, dispatch] = useContext(UserContext)
   const [userData, setUserData] = useState(initialUser)
-
+  
   const users = localStorage.getItem('token')
 
   const navigate = useNavigate()
-  let id = state.user.id
+  
   
   let { data: user } = useQuery('userCache', async () => {
-    const response = await API.get(`/user/${id}`);
+    const response = await API.get(`/user`);
+    setUserData(response.data.data)
+    console.log(response)
     return response.data.data;
   });
-  console.log(user)
+  
 
   useEffect(()=> {
 
@@ -69,7 +71,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaUserCircle className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{user.full_name}</h5>
+                    <h5>{userData.fullname}</h5>
                     <p className="text-muted">Full Name</p>
                   </div>
                 </div>
@@ -77,7 +79,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaEnvelope className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{user.email}</h5>
+                    <h5>{userData.email}</h5>
                     <p className="text-muted">Email Address</p>
                   </div>
                 </div>
@@ -85,19 +87,19 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaRegMoneyBillAlt className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{user.status}Active</h5>
+                    <h5>{userData.status}Active</h5>
                     <p className="text-muted">Status</p>
                   </div>
                 </div>
                 {/* Gender */}
                 <div className="d-flex mb-3 align-items-start">
-                  {user.gender === "Male" ? (
+                  {userData.gender === "Male" ? (
                     <FaMale className="text-danger me-3 fs-1" />
                   ) : (
                     <FaFemale className="text-danger me-3 fs-1" />
                   )}
                   <div>
-                    <h5>{user.gender}</h5>
+                    <h5>{userData.gender}</h5>
                     <p className="text-muted">Gender</p>
                   </div>
                 </div>
@@ -105,7 +107,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaPhone className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{user.phone}</h5>
+                    <h5>{userData.phone}</h5>
                     <p className="text-muted">Phone Number</p>
                   </div>
                 </div>
@@ -113,7 +115,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaMapMarked className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{user.address}</h5>
+                    <h5>{userData.address}</h5>
                     <p className="text-muted">Address</p>
                   </div>
                 </div>
