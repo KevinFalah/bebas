@@ -18,11 +18,12 @@ import (
 )
 
 type handlerAuth struct {
-	AuthRepository repositories.AuthRepository
+	AuthRepository    repositories.AuthRepository
+	ProfileRepository repositories.ProfileRepository
 }
 
-func HandlerAuth(AuthRepository repositories.AuthRepository) *handlerAuth {
-	return &handlerAuth{AuthRepository}
+func HandlerAuth(AuthRepository repositories.AuthRepository, ProfileRepository repositories.ProfileRepository) *handlerAuth {
+	return &handlerAuth{AuthRepository, ProfileRepository}
 }
 
 func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
@@ -54,15 +55,15 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{
-		FullName: request.FullName,
+		Fullname:     request.Fullname,
 		Email:    request.Email,
 		Password: password,
-		Address:  request.Address,
-		Phone:    request.Phone,
 		Gender:   request.Gender,
+		Phone:    request.Phone,
+		Address:  request.Address,
 	}
 
-	data, err := h.AuthRepository.Register(user)
+	dataUser, err := h.AuthRepository.Register(user)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
@@ -70,8 +71,39 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Masukkin data ke profil
+	profileData := models.Profile{
+		Gender:    request.Gender,
+		Address:   request.Address,
+		Phone:     request.Phone,
+		Subscribe: false,
+	}
+
+	getProfileData, errProfile := h.ProfileRepository.AddProfile(profileData)
+	if errProfile != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: errProfile.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	fmt.Println(getProfileData)
+
+	registerResponse := authdto.RegisterResponse{
+		Fullname:     dataUser.Fullname,
+		Email:    dataUser.Email,
+		Password: password,
+		Gender:   dataUser.Gender,
+		Phone:    dataUser.Phone,
+		Address:  dataUser.Address,
+		Status:   false,
+		Role:     "user",
+	}
+
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: convertUserResponse(data)}
+	response := dto.SuccessResult{Code: http.StatusOK, Data: registerResponse}
+	// fmt.Println(response)
+
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -91,6 +123,7 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
 		Password: request.Password,
 	}
 
+	// Check email
 	user, err := h.AuthRepository.Login(user.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -109,10 +142,10 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// generate token
+	//generate token
 	claims := jwt.MapClaims{}
 	claims["id"] = user.ID
-	claims["exp"] = time.Now().Add(time.Hour * 3).Unix() //! 3 jam expired
+	claims["exp"] = time.Now().Add(time.Hour * 2).Unix() // 2 jam expired
 
 	token, errGenerateToken := jwtToken.GenerateToken(&claims)
 	if errGenerateToken != nil {
@@ -122,10 +155,13 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loginResponse := authdto.LoginResponse{
-		ID:       user.ID,
-		FullName: user.FullName,
-		Email:    user.Email,
-		Token:    token,
+		Fullname:    user.Fullname,
+		Email:   user.Email,
+		Token:   token,
+		Gender:  user.Gender,
+		Phone:   user.Phone,
+		Address: user.Address,
+		Role:    "user",
 	}
 
 	w.Header().Set("Content-Type", "application/json")

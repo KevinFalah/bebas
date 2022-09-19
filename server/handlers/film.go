@@ -7,6 +7,7 @@ import (
 	"dumbflix/repositories"
 	"encoding/json"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
@@ -16,6 +17,8 @@ import (
 type handlerFilm struct {
 	FilmRepository repositories.FilmRepository
 }
+
+var path_file = "PATH_FILE"
 
 func HandlerFilm(FilmRepository repositories.FilmRepository) *handlerFilm {
 	return &handlerFilm{FilmRepository}
@@ -30,6 +33,11 @@ func (h *handlerFilm) FindFilms(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 		return
+	}
+
+	// Untuk mengembed path file di property thumbnailfilm
+	for i, p := range films {
+		films[i].ThumbnailFilm = os.Getenv("PATH_FILE") + p.ThumbnailFilm
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -51,6 +59,9 @@ func (h *handlerFilm) GetFilm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// path untuk membuat api file image
+	film.ThumbnailFilm = os.Getenv("PATH_FILE") + film.ThumbnailFilm
+
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseFilm(film)}
 	json.NewEncoder(w).Encode(response)
@@ -59,12 +70,17 @@ func (h *handlerFilm) GetFilm(w http.ResponseWriter, r *http.Request) {
 func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	request := new(filmdto.FilmRequest)
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-		json.NewEncoder(w).Encode(response)
-		return
+	// Variable untuk memanggil uploadFile
+	dataContex := r.Context().Value("image")
+	filename := dataContex.(string)
+
+	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
+	request := filmdto.CreateFilmRequest{
+		Title:         r.FormValue("title"),
+		ThumbnailFilm: filename,
+		Year:          r.FormValue("year"),
+		Description:   r.FormValue("description"),
+		CategoryID:    category_id,
 	}
 
 	validation := validator.New()
@@ -78,9 +94,9 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 
 	film := models.Film{
 		Title:         request.Title,
-		Description:   request.Description,
+		ThumbnailFilm: filename,
 		Year:          request.Year,
-		ThumbnailFilm: request.ThumbnailFilm,
+		Description:   request.Description,
 		CategoryID:    request.CategoryID,
 	}
 
@@ -174,6 +190,7 @@ func (h *handlerFilm) DeleteFilm(w http.ResponseWriter, r *http.Request) {
 
 func convertResponseFilm(u models.Film) models.FilmResponse {
 	return models.FilmResponse{
+		ID:            u.ID,
 		Title:         u.Title,
 		Description:   u.Description,
 		Year:          u.Year,

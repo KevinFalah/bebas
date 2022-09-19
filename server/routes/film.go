@@ -15,7 +15,7 @@ func FilmRoutes(r *mux.Router) {
 
 	r.HandleFunc("/films", h.FindFilms).Methods("GET")
 	r.HandleFunc("/film/{id}", h.GetFilm).Methods("GET")
-	r.HandleFunc("/film", middleware.Auth(h.CreateFilm)).Methods("POST")
-	r.HandleFunc("/film/{id}", h.UpdateFilm).Methods("PATCH")
-	r.HandleFunc("/film/{id}", h.DeleteFilm).Methods("DELETE")
+	r.HandleFunc("/film", middleware.Auth(middleware.UploadFile(h.CreateFilm))).Methods("POST")
+	r.HandleFunc("/film/{id}", middleware.Auth(h.UpdateFilm)).Methods("PATCH")
+	r.HandleFunc("/film/{id}", middleware.Auth(h.DeleteFilm)).Methods("DELETE")
 }

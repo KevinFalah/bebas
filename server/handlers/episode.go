@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	episodesdto "dumbflix/dto/episodes"
+	episodesdto "dumbflix/dto/episode"
 	dto "dumbflix/dto/result"
 	"dumbflix/models"
 	"dumbflix/repositories"
 	"encoding/json"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
@@ -25,6 +26,16 @@ func (h *handlerEpisode) FindEpisodes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	episodes, err := h.EpisodeRepository.FindEpisodes()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err.Error())
+	}
+
+	// Untuk mengembed path file di property
+	for i, p := range episodes {
+		episodes[i].ThumbnailEpisode = os.Getenv("PATH_FILE") + p.ThumbnailEpisode
+	}
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(err.Error())
@@ -49,6 +60,9 @@ func (h *handlerEpisode) GetEpisode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// path untuk membuat api file image
+	episode.ThumbnailEpisode = os.Getenv("PATH_FILE") + episode.ThumbnailEpisode
+
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseEpisode(episode)}
 	json.NewEncoder(w).Encode(response)
@@ -57,12 +71,16 @@ func (h *handlerEpisode) GetEpisode(w http.ResponseWriter, r *http.Request) {
 func (h *handlerEpisode) CreateEpisode(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	request := new(episodesdto.CreateEpisodeRequest)
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-		json.NewEncoder(w).Encode(response)
-		return
+	dataContex := r.Context().Value("image")
+	filename := dataContex.(string)
+
+	film_id, _ := strconv.Atoi(r.FormValue("film_id"))
+	request := episodesdto.CreateEpisodeRequest{
+		Title:            r.FormValue("title"),
+		ThumbnailEpisode: filename,
+		LinkFilm:         r.FormValue("linkfilm"),
+		FilmID:           film_id,
+		Description:      r.FormValue("description"),
 	}
 
 	validation := validator.New()
@@ -76,7 +94,7 @@ func (h *handlerEpisode) CreateEpisode(w http.ResponseWriter, r *http.Request) {
 
 	episode := models.Episode{
 		Title:            request.Title,
-		ThumbnailEpisode: request.ThumbnailEpisode,
+		ThumbnailEpisode: filename,
 		LinkFilm:         request.LinkFilm,
 		FilmID:           request.FilmID,
 		Description:      request.Description,

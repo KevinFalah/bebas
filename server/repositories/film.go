@@ -27,7 +27,7 @@ func (r *repository) FindFilms() ([]models.Film, error) {
 
 func (r *repository) GetFilm(ID int) (models.Film, error) {
 	var Film models.Film
-	// not yet using category relation, cause this step doesnt Belong to Many
+	//
 	err := r.db.Preload("Category").First(&Film, ID).Error // add this code
 
 	return Film, err

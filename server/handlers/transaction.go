@@ -2,7 +2,7 @@ package handlers
 
 import (
 	dto "dumbflix/dto/result"
-	transactionsdto "dumbflix/dto/transactions"
+	transactionsdto "dumbflix/dto/transaction"
 	"dumbflix/models"
 	"dumbflix/repositories"
 	"encoding/json"
@@ -90,7 +90,7 @@ func (h *handlerTransaction) CreateTransaction(w http.ResponseWriter, r *http.Re
 	}
 
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: convertTransactionResponse(data)}
+	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)}
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -106,7 +106,7 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 	}
 
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
-	transactionData, err := h.TransactionRepository.GetTransaction(int(id))
+	transaction, err := h.TransactionRepository.GetTransaction(int(id))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
@@ -115,18 +115,26 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 	}
 
 	if request.StartDate != "" {
-		transactionData.StartDate = request.StartDate
+		transaction.StartDate = request.StartDate
 	}
 
 	if request.DueDate != "" {
-		transactionData.DueDate = request.DueDate
+		transaction.DueDate = request.DueDate
+	}
+
+	if request.UserID != 0 {
+		transaction.UserID = request.UserID
 	}
 
 	if request.Attache != "" {
-		transactionData.Attache = request.Attache
+		transaction.Attache = request.Attache
 	}
 
-	data, err := h.TransactionRepository.UpdateTransaction(transactionData)
+	if request.Status != false {
+		transaction.Status = request.Status
+	}
+
+	data, err := h.TransactionRepository.UpdateTransaction(transaction)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
@@ -135,9 +143,8 @@ func (h *handlerTransaction) UpdateTransaction(w http.ResponseWriter, r *http.Re
 	}
 
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: convertTransactionResponse(data)}
+	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)}
 	json.NewEncoder(w).Encode(response)
-
 }
 
 func (h *handlerTransaction) DeleteTransaction(w http.ResponseWriter, r *http.Request) {
@@ -161,17 +168,17 @@ func (h *handlerTransaction) DeleteTransaction(w http.ResponseWriter, r *http.Re
 	}
 
 	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: convertTransactionResponse(data)}
+	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)}
 	json.NewEncoder(w).Encode(response)
 }
 
-func convertTransactionResponse(u models.Transaction) transactionsdto.TransactionResponse {
+func convertResponseTransaction(t models.Transaction) transactionsdto.TransactionResponse {
 	return transactionsdto.TransactionResponse{
-		ID:        u.ID,
-		StartDate: u.StartDate,
-		DueDate:   u.DueDate,
-		UserID:    u.UserID,
-		Attache:   u.Attache,
-		Status:    u.Status,
+		ID:        t.ID,
+		StartDate: t.StartDate,
+		DueDate:   t.DueDate,
+		UserID:    t.UserID,
+		Attache:   t.Attache,
+		Status:    t.Status,
 	}
 }

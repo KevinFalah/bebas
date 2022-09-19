@@ -1,13 +1,21 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import MovieList from './MovieList'
-import {useState} from 'react'
 import dataMovies from '../dataDummy/DataFakeMovies'
-console.log(dataMovies)
+import { UserContext } from '../context/UserContext';
+import { useQuery } from 'react-query';
+import {API} from '../config/api'
 
 function MovieContainer() {
 
-    
+  let { data: products } = useQuery('moviesCache', async () => {
+    const response = await API.get('/products');
+    console.log(response)
+    return response.data.data;
+  });
+
+  console.log(products);
+
 
   return (
     <div >

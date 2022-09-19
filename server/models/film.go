@@ -1,19 +1,13 @@
 package models
 
-import "time"
-
 type Film struct {
 	ID            int                `json:"id" gorm:"primary_key:auto_increment"`
-	Title         string             `json:"title" form:"title" gorm:"type: varchar(255)"`
-	ThumbnailFilm string             `json:"thumbnailfilm" form:"thumbnailfilm" gorm:"type: varchar(255)"`
-	Year          string             `json:"year" form:"year" gorm:"type: varchar(255)"`
-	CategoryID    int                `json:"category_id" form:"category_id"`
+	Title         string             `json:"title" gorm:"type: varchar(255)" form:"title"`
+	ThumbnailFilm string             `json:"thumbnailfilm" form:"image" gorm:"type: varchar(255)"`
+	Year          string             `json:"year" gorm:"type: varchar(255)" form:"year"`
+	CategoryID    int                `json:"category_id" form:"category_id" gorm:"type:int"`
 	Category      CategoriesResponse `json:"category"`
-	Description   string             `json:"description" gorm:"type:text" form:"description"`
-	// Category   []Category           `json:"category" gorm:"many2many:film_categories"`
-	// CategoryID []int                `json:"-" form:"category_id" gorm:"-"`
-	CreatedAt time.Time `json:"-"`
-	UpdatedAt time.Time `json:"-"`
+	Description   string             `json:"description"  gorm:"type: text" form:"description"`
 }
 
 type FilmResponse struct {
@@ -21,11 +15,9 @@ type FilmResponse struct {
 	Title         string             `json:"title"`
 	ThumbnailFilm string             `json:"thumbnailfilm"`
 	Year          string             `json:"year"`
-	CategoryID    int                `json:"-"`
+	CategoryID    int                `json:"category_id"`
 	Category      CategoriesResponse `json:"category"`
 	Description   string             `json:"description"`
-	// Category   []Category           `json:"category" gorm:"many2many:film_categories"`
-	// CategoryID []int                `json:"-" form:"category_id" gorm:"-"`
 }
 
 type FilmEpisodeResponse struct {
@@ -33,20 +25,22 @@ type FilmEpisodeResponse struct {
 	Title         string             `json:"title"`
 	ThumbnailFilm string             `json:"thumbnailfilm"`
 	Year          string             `json:"year"`
-	CategoryID    int                `json:"-"`
+	CategoryID    int                `json:"category_id"`
 	Category      CategoriesResponse `json:"category"`
-	// Description   string             `json:"description"`
-	// Category   []Category           `json:"category" gorm:"many2many:film_categories"`
-	// CategoryID []int                `json:"-" form:"category_id" gorm:"-"`
 }
 
 type FilmCategoryResponse struct {
-	ID            int    `json:"id"`
-	Title         string `json:"title"`
-	ThumbnailFilm string `json:"thumbnailfilm"`
-	Year          string `json:"year"`
-	CategoryID    int    `json:"-"`
-	Description   string `json:"description"`
+	ID            int                `json:"id"`
+	Title         string             `json:"title"`
+	ThumbnailFilm string             `json:"thumbnailfilm"`
+	Year          string             `json:"year"`
+	CategoryID    int                `json:"category_id"`
+	Category      CategoriesResponse `json:"category"`
+	Description   string             `json:"description"`
+}
+
+func (FilmCategoryResponse) TableName() string {
+	return "films"
 }
 
 func (FilmEpisodeResponse) TableName() string {
@@ -54,9 +48,5 @@ func (FilmEpisodeResponse) TableName() string {
 }
 
 func (FilmResponse) TableName() string {
-	return "films"
-}
-
-func (FilmCategoryResponse) TableName() string {
 	return "films"
 }

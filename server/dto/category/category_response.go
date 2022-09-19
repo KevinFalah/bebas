@@ -1,4 +1,4 @@
-package categoriesdto
+package categorydto
 
 type CategoryResponse struct {
 	ID   int    `json:"id"`

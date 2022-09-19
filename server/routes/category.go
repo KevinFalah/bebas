@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dumbflix/handlers"
+	"dumbflix/pkg/middleware"
 	"dumbflix/pkg/mysql"
 	"dumbflix/repositories"
 
@@ -14,7 +15,7 @@ func CategoryRoutes(r *mux.Router) {
 
 	r.HandleFunc("/categories", h.FindCategories).Methods("GET")
 	r.HandleFunc("/category/{id}", h.GetCategory).Methods("GET")
-	r.HandleFunc("/category", h.CreateCategory).Methods("POST")
-	r.HandleFunc("/category/{id}", h.UpdateCategory).Methods("PATCH")
-	r.HandleFunc("/category/{id}", h.DeleteCategory).Methods("DELETE")
+	r.HandleFunc("/category", middleware.Auth(h.CreateCategory)).Methods("POST")
+	r.HandleFunc("/category/{id}", middleware.Auth(h.UpdateCategory)).Methods("PATCH")
+	r.HandleFunc("/category/{id}", middleware.Auth(h.DeleteCategory)).Methods("DELETE")
 }

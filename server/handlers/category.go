@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	categoriesdto "dumbflix/dto/categories"
+	categorydto "dumbflix/dto/category"
 	dto "dumbflix/dto/result"
 	"dumbflix/models"
 	"dumbflix/repositories"
@@ -56,7 +56,7 @@ func (h *handlerCategory) GetCategory(w http.ResponseWriter, r *http.Request) {
 func (h *handlerCategory) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	request := new(categoriesdto.CreateCategoryRequest)
+	request := new(categorydto.CreateCategoryRequest)
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
@@ -92,7 +92,7 @@ func (h *handlerCategory) CreateCategory(w http.ResponseWriter, r *http.Request)
 func (h *handlerCategory) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	request := new(categoriesdto.UpdateCategoryRequest)
+	request := new(categorydto.UpdateCategoryRequest)
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
@@ -151,8 +151,8 @@ func (h *handlerCategory) DeleteCategory(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(response)
 }
 
-func convertCategoryResponse(u models.Category) categoriesdto.CategoryResponse {
-	return categoriesdto.CategoryResponse{
+func convertCategoryResponse(u models.Category) categorydto.CategoryResponse {
+	return categorydto.CategoryResponse{
 		ID:   u.ID,
 		Name: u.Name,
 	}

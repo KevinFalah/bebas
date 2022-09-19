@@ -6,13 +6,14 @@ import (
 	"fmt"
 )
 
+// Automatic Migration if Running App
 func RunMigration() {
 	err := mysql.DB.AutoMigrate(
+		&models.User{},
 		&models.Film{},
 		&models.Category{},
-		&models.Episode{},
 		&models.Transaction{},
-		&models.User{},
+		&models.Episode{},
 	)
 
 	if err != nil {

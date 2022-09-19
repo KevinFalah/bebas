@@ -5,10 +5,10 @@ import (
 )
 
 func RouteInit(r *mux.Router) {
-	CategoryRoutes(r)
-	FilmRoutes(r)
-	EpisodeRoutes(r)
-	TransactionRoutes(r)
 	UserRoutes(r)
 	AuthRoutes(r)
+	FilmRoutes(r)
+	CategoryRoutes(r)
+	EpisodeRoutes(r)
+	TransactionRoutes(r)
 }

@@ -8,16 +8,16 @@ function VideoDetail() {
 
   const [isLogin, setIsLogin] =useState(false)
 
-  const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('user'))
+  // const navigate = useNavigate()
+  // const user = JSON.parse(localStorage.getItem('token'))
 
-  useEffect(() => {
-    if(user) setIsLogin(true)
-    else {
-      setIsLogin(false)
-      navigate('/')
-    }
-  }, [user])
+  // useEffect(() => {
+  //   if(user) setIsLogin(true)
+  //   else {
+  //     setIsLogin(false)
+  //     navigate('/')
+  //   }
+  // }, [user])
 
   return (
     <>
