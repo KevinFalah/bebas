@@ -8,6 +8,7 @@ type Film struct {
 	CategoryID    int                `json:"category_id" form:"category_id" gorm:"type:int"`
 	Category      CategoriesResponse `json:"category"`
 	Description   string             `json:"description"  gorm:"type: text" form:"description"`
+	LinkFilm      string             `json:"linkfilm"  gorm:"type: text" form:"linkfilm"`
 }
 
 type FilmResponse struct {
@@ -18,6 +19,8 @@ type FilmResponse struct {
 	CategoryID    int                `json:"category_id"`
 	Category      CategoriesResponse `json:"category"`
 	Description   string             `json:"description"`
+	LinkFilm      string             `json:"linkfilm"`
+
 }
 
 type FilmEpisodeResponse struct {
@@ -27,6 +30,8 @@ type FilmEpisodeResponse struct {
 	Year          string             `json:"year"`
 	CategoryID    int                `json:"category_id"`
 	Category      CategoriesResponse `json:"category"`
+	LinkFilm      string             `json:"linkfilm"`
+
 }
 
 type FilmCategoryResponse struct {
@@ -37,6 +42,8 @@ type FilmCategoryResponse struct {
 	CategoryID    int                `json:"category_id"`
 	Category      CategoriesResponse `json:"category"`
 	Description   string             `json:"description"`
+	LinkFilm      string             `json:"linkfilm"`
+
 }
 
 func (FilmCategoryResponse) TableName() string {

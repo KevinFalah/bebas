@@ -1,23 +1,27 @@
 package models
 
+import "time"
+
 type Transaction struct {
-	ID        int          `json:"id" gorm:"primary_key:auto_increment"`
-	StartDate string       `json:"startdate" form:"startdate" gorm:"type: varchar(255)"`
-	DueDate   string       `json:"duedate" form:"duedate" gorm:"type: varchar(255)"`
-	UserID    int          `json:"user_id" form:"user_id"`
-	User      UserResponse `json:"user"`
-	Attache   string       `json:"attache" form:"attache" gorm:"type: varchar(255)"`
-	Status    bool         `json:"status" gorm:"type:text" form:"status"`
+	ID        int                  		`json:"id" gorm:"primary_key:auto_increment"`
+	StartDate time.Time            		`json:"startDate"`
+	DueDate	  time.Time     	   		`json:"dueDate"`
+	UserID    int	                    `json:"-" form:"user_id"`
+	User	  UserTransactionResponse 	`json:"user" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Price	  int						`json:"price"`
+	Status    string               		`json:"status" gorm:"type:varchar(50)"`
+	CreatedAt time.Time            		`json:"-"`
+	UpdatedAt time.Time            		`json:"-"`
 }
 
 type TransactionResponse struct {
-	ID        int          `json:"id"`
-	StartDate string       `json:"startdate"`
-	DueDate   string       `json:"duedate"`
-	UserID    int          `json:"user_id"`
-	User      UserResponse `json:"user"`
-	Attache   string       `json:"attache"`
-	Status    bool         `json:"status"`
+	ID        int                  		`json:"id"`
+	StartDate time.Time            		`json:"startDate"`
+	DueDate	  time.Time     	   		`json:"dueDate"`
+	UserID    int	                    `json:"-"`
+	User	  UserTransactionResponse 	`json:"user" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Price	  string					`json:"price"`
+	Status    string               		`json:"status"`
 }
 
 type UserResponse struct {
@@ -30,6 +34,10 @@ type UserResponse struct {
 	Address   string `json:"address" form:"address"`
 	Subscribe string `json:"subscribe" form:"subscribe"`
 	Status    string `json:"status" form:"status"`
+}
+
+func (TransactionResponse) TableName() string {
+	return "transactions"
 }
 
 func (UserResponse) TableName() string {

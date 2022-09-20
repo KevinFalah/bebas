@@ -80,6 +80,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		ThumbnailFilm: filename,
 		Year:          r.FormValue("year"),
 		Description:   r.FormValue("description"),
+		LinkFilm:      r.FormValue("linkfilm"),
 		CategoryID:    category_id,
 	}
 
@@ -97,6 +98,7 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		ThumbnailFilm: filename,
 		Year:          request.Year,
 		Description:   request.Description,
+		LinkFilm:      request.LinkFilm,
 		CategoryID:    request.CategoryID,
 	}
 
@@ -196,5 +198,6 @@ func convertResponseFilm(u models.Film) models.FilmResponse {
 		Year:          u.Year,
 		ThumbnailFilm: u.ThumbnailFilm,
 		Category:      u.Category,
+		LinkFilm:      u.LinkFilm,
 	}
 }

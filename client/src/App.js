@@ -67,7 +67,7 @@ function App() {
         />
 
         <Route
-          path="/video"
+          path="/video/:id"
           element={
             <Layout>
               <VideoDetail />

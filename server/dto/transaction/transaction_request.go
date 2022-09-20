@@ -1,12 +1,14 @@
 package transactionsdto
 
+import "time"
+
 type TransactionRequest struct {
-	StartDate string `json:"startdate" gorm:"type: varchar(255)"`
-	DueDate   string `json:"duedate" gorm:"type: varchar(255)"`
-	UserID    int    `json:"user_id" form:"user_id"`
-	Attache   string `json:"attache" form:"attache" gorm:"type: varchar(255)"`
-	Status    bool   `json:"status" gorm:"type:text" form:"status"`
+	StartDate time.Time            		`json:"startDate"`
+	DueDate	  time.Time     	   		`json:"dueDate"`
+	UserID	 int				 	    `json:"userId" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Price	  int						`json:"price"`
 }
+
 
 type CreateTransactionRequest struct {
 	StartDate string `json:"startdate"`

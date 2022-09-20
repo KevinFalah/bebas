@@ -37,6 +37,7 @@ function SeriesContainer() {
             return(
                 <Col md={2} key={index}>
                     <SeriesList 
+                        id={data.id}
                         seriesImg={data.thumbnailfilm}
                         title={data.title}
                         year={data.year}

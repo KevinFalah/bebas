@@ -36,6 +36,7 @@ function MovieContainer() {
             return(
               <Col md={2} key={index}>
                   <MovieList 
+                    id={movies.id}
                     movieImg={movies.thumbnailfilm}
                     title={movies.title}
                     year={movies.year}

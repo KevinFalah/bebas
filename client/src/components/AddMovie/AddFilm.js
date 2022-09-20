@@ -21,16 +21,16 @@ const AddFilm = () => {
 
   const navigate = useNavigate();
 
-  const [rates, setRates] = useState([
-    { titleEpisode: "", attachThumbnail: "", linkFilm: "" },
-  ]);
+  // const [rates, setRates] = useState([
+  //   { titleEpisode: "", attachThumbnail: "", linkFilm: "" },
+  // ]);
 
-  const addRate = () => {
-    setRates([
-      ...rates,
-      { titleEpisode: "", attachThumbnail: "", linkFilm: "" },
-    ]);
-  };
+  // const addRate = () => {
+  //   setRates([
+  //     ...rates,
+  //     { titleEpisode: "", attachThumbnail: "", linkFilm: "" },
+  //   ]);
+  // };
 
   const [message, setMessage] = useState(null);
 
@@ -43,6 +43,7 @@ const AddFilm = () => {
     thumbnailfilm: "",
     year: "",
     description: "",
+    linkfilm:  "",
     category_id: 0,
   });
 
@@ -77,6 +78,7 @@ const AddFilm = () => {
       formData.set("title", form?.title);
       formData.set("description", form?.description);
       formData.set("year", form?.year);
+      formData.set("linkfilm", form?.linkfilm);
       formData.set("category_id", form?.category_id);
       formData.set(
         "thumbnailfilm",
@@ -120,12 +122,11 @@ const AddFilm = () => {
           <div className="form-group mb-2">
             <div
               style={{
-                display: "flex",
-                gap: "10px",
+                display: "flex"
               }}
             >
               <Form.Group
-                style={{ width: "30rem" }}
+                style={{ width: "100%" }}
                 controlId="formBasicAttache"
               >
                 <Form.Control
@@ -140,7 +141,7 @@ const AddFilm = () => {
                 />
               </Form.Group>
               <Form.Group
-                style={{ marginLeft: "18rem", width: "12rem" }}
+                style={{ marginLeft: "10px", width: "12rem" }}
                 controlId="formBasicAttache"
               >
                 <label for="attachThumbnail" className="labelThumbnail rounded">
@@ -166,7 +167,7 @@ const AddFilm = () => {
                   name="year"
                   data-id=""
                   id="year"
-                  className="linkFilm"
+                  className="year"
                   placeholder="Year"
                   style={styles.customInput}
                   onChange={handleChange}
@@ -197,97 +198,20 @@ const AddFilm = () => {
                   onChange={handleChange}
                 ></textarea>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {rates.map((row, index) => {
-          const titleEpisodeId = `title-${index}`,
-            attachThumbnailId = `attach-${index}`,
-            linkFilmId = `link-${index}`;
-
-          return (
-            <div key={index} style={styles.container} className="mt-3">
-              <div className="form-group mb-2">
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, 1fr)",
-                    gridGap: "1rem",
-                  }}
-                >
-                  <input
-                    type="text"
-                    name={titleEpisodeId}
-                    data-id={index}
-                    id={titleEpisodeId}
-                    className="titleEpisode"
-                    placeholder="Title Episode"
-                    style={styles.customInputTitle}
-                  />
-                  <input
-                    type="file"
-                    name={attachThumbnailId}
-                    data-id={index}
-                    id={attachThumbnailId}
-                    className="attachThumbnail"
-                    style={styles.customInputFile}
-                  />
-                  <button
-                    className="btn-grey"
-                    onClick={() => {
-                      document.getElementsByName(attachThumbnailId)[0].click();
-                    }}
-                    style={{
-                      width: "40%",
-                      height: "50px",
-                      fontSize: "15px",
-                      textAlign: "left",
-                      float: "right",
-                      justifySelf: "right",
-                    }}
-                  >
-                    Attach Thumbnail{" "}
-                    <div
-                      style={{
-                        float: "right",
-                        display: "inline",
-                        fontSize: "20px",
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faPaperclip} />
-                    </div>
-                  </button>
-                </div>
-              </div>
               <div className="form-group mb-2">
                 <input
                   type="text"
-                  name={linkFilmId}
-                  data-id={index}
-                  id={linkFilmId}
+                  name="linkfilm"
+                  data-id=""
+                  id="linkfilm"
                   className="linkFilm"
-                  placeholder="Link Film"
+                  placeholder="Linkfilm"
                   style={styles.customInput}
+                  onChange={handleChange}
                 />
               </div>
             </div>
-          );
-        })}
-        <div className="form-group mb-2" style={styles.container}>
-          <button
-            className="btn-grey"
-            style={{
-              width: "100%",
-              height: "50px",
-              color: "#e50914",
-              backgroundColor: "rgba(210, 210, 210, 0.25)",
-              border: "2px solid #d2d2d2",
-            }}
-            onClick={addRate}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
+          </div>
         </div>
         <div className="d-flex form-group mb-4 justify-content-end px-5">
           <Button
