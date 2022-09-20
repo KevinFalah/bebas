@@ -48,14 +48,14 @@ function Profile() {
 
   useEffect(()=> {
 
-    if(!users){
-      dispatch({
-        type: 'LOGOUT'
-      })
-      setUserData(initialUser)
-      navigate('/')
-    }
-  }, [users, state.isLogin])
+    // if(!users){
+    //   dispatch({
+    //     type: 'LOGOUT'
+    //   })
+    //   setUserData(initialUser)
+    //   navigate('/')
+    // }
+  }, [userData, state.isLogin])
   
 
   return (

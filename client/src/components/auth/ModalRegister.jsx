@@ -52,17 +52,17 @@ function ModalRegister( {handleClose, show} ) {
         const body = JSON.stringify(form);
         // Insert data user to database
         const response = await API.post('/register', body, config);
-        console.log(response)
        
-  
+          console.log(response)
         // Notification
-        if (response.data.code === 200) {
+        if (response.status === 200) {
           const alert = (
             <Alert variant="success" className="py-1">
               Success
             </Alert>
           );
           setMessage(alert);
+          switchRegister()
           setForm({
             email: "",
             password: "",
@@ -72,7 +72,6 @@ function ModalRegister( {handleClose, show} ) {
             address: ""
           });
 
-          switchRegister()
         } else {
           const alert = (
             <Alert variant="danger" className="py-1">
@@ -80,6 +79,7 @@ function ModalRegister( {handleClose, show} ) {
             </Alert>
           );
           setMessage(alert);
+
         }
         } else {
         // Data body
@@ -105,6 +105,7 @@ function ModalRegister( {handleClose, show} ) {
             email: "",
             password: "",
           });
+
         } else {
           const alert = (
             <Alert variant="danger" className="py-1">
@@ -113,7 +114,11 @@ function ModalRegister( {handleClose, show} ) {
           );
           setMessage(alert);
         }
-        navigate('/')
+        if(response.data.data.role === "admin") {
+          navigate('/list-film')
+        }else {
+          navigate('/')
+        }
         handleClose()
         }
       } catch (error) {

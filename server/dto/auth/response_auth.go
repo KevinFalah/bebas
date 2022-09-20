@@ -8,7 +8,6 @@ type RegisterResponse struct {
 	Phone    string `json:"phone" gorm:"type: varchar(255)"`
 	Address  string `json:"address" gorm:"type: varchar(255)"`
 	Status   bool   `json:"status" gorm:"type: boolean"`
-	Role     string `gorm:"type: varchar(255)" json:"role"`
 }
 
 type LoginResponse struct {
@@ -18,5 +17,5 @@ type LoginResponse struct {
 	Gender  string `json:"gender" gorm:"type: varchar(255)"`
 	Phone   string `json:"phone" gorm:"type: varchar(255)"`
 	Address string `json:"address" gorm:"type: varchar(255)"`
-	Role    string `gorm:"type: varchar(255)" json:"role"`
+	Role string `json:"role"`
 }

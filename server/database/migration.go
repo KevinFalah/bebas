@@ -11,6 +11,7 @@ func RunMigration() {
 	err := mysql.DB.AutoMigrate(
 		&models.User{},
 		&models.Film{},
+		&models.Profile{},
 		&models.Category{},
 		&models.Transaction{},
 		&models.Episode{},

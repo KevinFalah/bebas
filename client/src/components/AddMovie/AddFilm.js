@@ -182,8 +182,8 @@ const AddFilm = () => {
                   <option disabled selected>
                     Category
                   </option>
-                  <option value="1">TV Series</option>
-                  <option value="2">Movie</option>
+                  <option value="2">TV Series</option>
+                  <option value="1">Movie</option>
                 </select>
               </div>
               <div className="form-group mb-0">

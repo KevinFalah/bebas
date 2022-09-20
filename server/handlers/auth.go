@@ -55,15 +55,29 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{
-		Fullname:     request.Fullname,
+		Fullname: request.Fullname,
 		Email:    request.Email,
 		Password: password,
 		Gender:   request.Gender,
 		Phone:    request.Phone,
 		Address:  request.Address,
+		Role:     "user",
 	}
 
 	dataUser, err := h.AuthRepository.Register(user)
+	if dataUser.ID <= 2 {
+		dataUser.Role = "admin"
+		dataUser, err := h.AuthRepository.RegisterUpdateAuth(dataUser)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
+			json.NewEncoder(w).Encode(response)
+		}
+
+		w.WriteHeader(http.StatusOK)
+		response := dto.SuccessResult{Code: http.StatusOK, Data: dataUser}
+		json.NewEncoder(w).Encode(response)
+	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
@@ -89,22 +103,26 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(getProfileData)
 
-	registerResponse := authdto.RegisterResponse{
-		Fullname:     dataUser.Fullname,
-		Email:    dataUser.Email,
-		Password: password,
-		Gender:   dataUser.Gender,
-		Phone:    dataUser.Phone,
-		Address:  dataUser.Address,
-		Status:   false,
-		Role:     "user",
-	}
+	// registerResponse := authdto.RegisterResponse{
+	// 	Fullname:     dataUser.Fullname,
+	// 	Email:    dataUser.Email,
+	// 	Password: password,
+	// 	Gender:   dataUser.Gender,
+	// 	Phone:    dataUser.Phone,
+	// 	Address:  dataUser.Address,
+	// 	Status:   false,
+	// 	Role:     "user",
+	// }
 
-	w.WriteHeader(http.StatusOK)
-	response := dto.SuccessResult{Code: http.StatusOK, Data: registerResponse}
-	// fmt.Println(response)
+	// if user.Email == "admin@mail.com"{
+	// 	user.Role = "admin"
+	//   }
 
-	json.NewEncoder(w).Encode(response)
+	// w.WriteHeader(http.StatusOK)
+	// response := dto.SuccessResult{Code: http.StatusOK, Data: registerResponse}
+	// // fmt.Println(response)
+
+	// json.NewEncoder(w).Encode(response)
 }
 
 func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
@@ -155,13 +173,13 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loginResponse := authdto.LoginResponse{
-		Fullname:    user.Fullname,
-		Email:   user.Email,
-		Token:   token,
-		Gender:  user.Gender,
-		Phone:   user.Phone,
-		Address: user.Address,
-		Role:    "user",
+		Fullname: user.Fullname,
+		Email:    user.Email,
+		Token:    token,
+		Gender:   user.Gender,
+		Phone:    user.Phone,
+		Address:  user.Address,
+		Role:     user.Role,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

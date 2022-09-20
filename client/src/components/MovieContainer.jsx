@@ -8,13 +8,23 @@ import {API} from '../config/api'
 
 function MovieContainer() {
 
-  let { data: products } = useQuery('moviesCache', async () => {
-    const response = await API.get('/products');
-    console.log(response)
-    return response.data.data;
+  let { data: films } = useQuery('moviesCache', async () => {
+    const response = await API.get('/films');
+    console.log("response film", response)
+    
+    const resultResponse = response.data.data;
+
+    const resultFilter = resultResponse.filter((e) => {
+      if(e.category_id === 1) {
+        return e.category_id === 1
+      }
+    })
+
+    console.log(resultFilter)
+    return resultFilter
   });
 
-  console.log(products);
+  console.log(films);
 
 
   return (
@@ -22,11 +32,11 @@ function MovieContainer() {
       <Container className="my-5 overflow-hidden" id="" >
         <h3 className="text-light">Movies</h3>
         <Row>
-          {dataMovies.map((movies, index) => {
+          {films?.map((movies, index) => {
             return(
               <Col md={2} key={index}>
                   <MovieList 
-                    movieImg={movies.movieImg}
+                    movieImg={movies.thumbnailfilm}
                     title={movies.title}
                     year={movies.year}
                   />

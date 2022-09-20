@@ -95,7 +95,7 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		Gender:   request.Gender,
 		Phone:    request.Phone,
 		Address:  request.Address,
-		Role:     "user",
+		Role:     request.Role,
 	}
 
 	data, err := h.UserRepository.CreateUser(User)

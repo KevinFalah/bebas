@@ -4,8 +4,28 @@ import SeriesList from './SeriesList';
 import {useState} from 'react';
 // import youSeries from '../Images/you.png'
 import data from '../dataDummy/DataFakeSeries.jsx'
+import {useQuery} from 'react-query'
+import {API} from '../config/api'
 
 function SeriesContainer() {
+
+  let { data: films } = useQuery('moviesCache', async () => {
+    const response = await API.get('/films');
+    console.log("response film", response)
+
+    const resultResponse = response.data.data
+
+    const resultFilter = resultResponse.filter((e) => {
+      if(e.category_id === 2) {
+        return e.category_id === 2
+      }
+    })
+
+    console.log(resultFilter)
+    return resultFilter;
+  });
+
+  console.log(films);
 
 
   return (
@@ -13,11 +33,11 @@ function SeriesContainer() {
       <Container className="my-5 overflow-hidden" id="" >
         <h3 className="text-light">TV Series</h3>
         <Row>
-          {data.map((data, index) => {
+          {films?.map((data, index) => {
             return(
                 <Col md={2} key={index}>
                     <SeriesList 
-                        seriesImg={data.seriesImg}
+                        seriesImg={data.thumbnailfilm}
                         title={data.title}
                         year={data.year}
                     /> {/* Looping */}
