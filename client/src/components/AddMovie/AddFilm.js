@@ -180,11 +180,11 @@ const AddFilm = () => {
                   onChange={handleChange}
                   style={styles.customInput}
                 >
-                  <option disabled selected>
+                  <option className="bg-dark" disabled selected>
                     Category
                   </option>
-                  <option value="2">TV Series</option>
-                  <option value="1">Movie</option>
+                  <option className="bg-dark" value="2">TV Series</option>
+                  <option className="bg-dark" value="1">Movie</option>
                 </select>
               </div>
               <div className="form-group mb-0">
@@ -195,6 +195,7 @@ const AddFilm = () => {
                   name="description"
                   rows="4"
                   cols="50"
+                  className="text-muted"
                   onChange={handleChange}
                 ></textarea>
               </div>
@@ -212,14 +213,14 @@ const AddFilm = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="d-flex form-group mb-4 justify-content-end px-5">
+        <div className="d-flex form-group justify-content-end">
           <Button
             className="btn bg-danger text-white border-0 btn-regis px-5"
             type="submit"
           >
             Save
           </Button>
+        </div>
         </div>
       </form>
     </div>

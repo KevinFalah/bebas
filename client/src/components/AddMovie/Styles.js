@@ -15,8 +15,8 @@ export const styles = {
     border: "2px solid #d2d2d2",
     boxSizing: "border-box",
     borderRadius: "5px",
-    padding: "20px 1rem",
-    color: "white",
+    padding: "10px 5px",
+    color: "grey",
     fontSize: "15px",
   },
   textarea: {
@@ -25,7 +25,7 @@ export const styles = {
     border: "2px solid #d2d2d2",
     boxSizing: "border-box",
     borderRadius: "5px",
-    padding: "1rem",
+    padding: "1rem 5px",
     color: "white",
     fontSize: "15px",
     resize: "none"
@@ -37,8 +37,8 @@ export const styles = {
     border: "2px solid #d2d2d2",
     boxSizing: "border-box",
     borderRadius: "5px",
-    padding: "1rem",
-    color: "white",
+    padding: "1rem 5px",
+    color: "grey",
     fontSize: "15px",
   },
   customInputFile: {

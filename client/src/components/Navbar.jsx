@@ -8,35 +8,32 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import userPhoto from "../Images/user.png";
 import { Dropdown } from "react-bootstrap";
-import {FaUser, FaMoneyCheckAlt, FaSignOutAlt, FaVideo} from 'react-icons/fa'
-import {UserContext} from '../context/UserContext'
+import { FaUser, FaMoneyCheckAlt, FaSignOutAlt, FaVideo } from "react-icons/fa";
+import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
-
 
 function Navbar() {
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-  const [state, dispatch] = useContext(UserContext)
-  const user = localStorage.getItem('token')
+  const [state, dispatch] = useContext(UserContext);
+  const user = localStorage.getItem("token");
 
   const [isLogin, setIsLogin] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    navigate('/')
-  }
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   useEffect(() => {
-    if (user){
-      setIsLogin(true)
-    } else setIsLogin(false)
+    if (user) {
+      setIsLogin(true);
+    } else setIsLogin(false);
   }, [state, handleLogout]);
-  
-
 
   return (
     <nav className="navbar navbar-expand-lg bg-dark shadow sticky-top">
@@ -75,7 +72,7 @@ function Navbar() {
             </li>
           </ul>
           <div className="flex-grow-1 d-none d-sm-block">
-            <Link to='/'>
+            <Link to="/">
               <img src={Logo} alt="Dumbflix" />
             </Link>
           </div>
@@ -87,19 +84,21 @@ function Navbar() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu variant="dark">
-                    <Dropdown.Item as={Link} to='/profile'>
-                    <FaUser className="text-danger ms-2" /> 
+                  <Dropdown.Item as={Link} to="/profile">
+                    <FaUser className="text-danger ms-2" />
                     Profile
+                  </Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/payment">
+                    <FaMoneyCheckAlt className="text-danger ms-2" /> Pay
+                  </Dropdown.Item>
+                  {state.isAdmin && (
+                    <Dropdown.Item as={Link} to="/list-film">
+                      <FaVideo className="text-danger ms-2" /> Film
                     </Dropdown.Item>
-                  <Dropdown.Item as={Link} to='/payment'>
-                   <FaMoneyCheckAlt className="text-danger ms-2"/> Pay
-                  </Dropdown.Item>
-                  <Dropdown.Item as={Link} to='/list-film'>
-                   <FaVideo className="text-danger ms-2"/> Film
-                  </Dropdown.Item>
-                  <Dropdown.Divider className="bg-light dropDivid"  />
+                  )}
+                  <Dropdown.Divider className="bg-light dropDivid" />
                   <Dropdown.Item href="#" onClick={handleLogout}>
-                  <FaSignOutAlt className="text-danger ms-2" />   Logout
+                    <FaSignOutAlt className="text-danger ms-2" /> Logout
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

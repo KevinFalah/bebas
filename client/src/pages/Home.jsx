@@ -1,4 +1,5 @@
 import React from "react";
+import {Row, Container} from 'react-bootstrap'
 import MovieContainer from "../components/MovieContainer";
 import SeriesContainer from "../components/SeriesContainer";
 
@@ -29,11 +30,8 @@ function Home() {
           </div>
         </div>
       </div>
-
-      <div className="sectionSeries">
-          <SeriesContainer />
-          <MovieContainer />
-      </div>
+        <MovieContainer/>
+        <SeriesContainer/>
     </>
   );
 }

@@ -38,7 +38,7 @@ function VideoDetail() {
           title="Peaky Blinders"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
+          allowfullscreen="true"
         ></iframe>
       </div>
 

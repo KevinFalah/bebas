@@ -1,4 +1,4 @@
-import React, {useState, useContext } from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -51,7 +51,17 @@ function ModalRegister( {handleClose, show} ) {
           // Data body
         const body = JSON.stringify(form);
         // Insert data user to database
-        const response = await API.post('/register', body, config);
+        if(form.email === "" || form.password === ""){
+          const alert = (
+            <Alert variant="danger" className="py-1">
+              All Fields Is Required
+            </Alert>
+          );
+          setMessage(alert)
+          return;
+        }
+          const response = await API.post('/register', body, config);
+        
        
           console.log(response)
         // Notification
@@ -62,7 +72,7 @@ function ModalRegister( {handleClose, show} ) {
             </Alert>
           );
           setMessage(alert);
-          switchRegister()
+
           setForm({
             email: "",
             password: "",
@@ -71,6 +81,8 @@ function ModalRegister( {handleClose, show} ) {
             phone: "",
             address: ""
           });
+          e.target.reset()
+          switchRegister()
 
         } else {
           const alert = (
@@ -115,7 +127,7 @@ function ModalRegister( {handleClose, show} ) {
           setMessage(alert);
         }
         if(response.data.data.role === "admin") {
-          navigate('/list-film')
+          navigate('/profile')
         }else {
           navigate('/')
         }
@@ -134,9 +146,9 @@ function ModalRegister( {handleClose, show} ) {
 
 
     const switchRegister = () => {
-      setForm(form)
       setIsRegister(!isRegister)
     }
+
 
   return (
     <>

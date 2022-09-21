@@ -21,7 +21,7 @@ function reducer(state, action) {
       console.log("is admin", payload.role === "admin" ? true : false);
       return {
         isLogin: true,
-        isAdmin: payload.role === "admin" ? true : false,
+        isAdmin: payload.role === "admin",
         user: payload,
       };
     case "AUTH_ERROR":

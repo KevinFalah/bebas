@@ -8,7 +8,7 @@ import {
   FaRegMoneyBillAlt,
   FaUserCircle,
 } from "react-icons/fa";
-import {Container, Row, Col, Card, Button} from 'react-bootstrap'
+import {Container, Row, Col, Card, Button, Badge} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import profileUser from '../Images/profileUser.png'
 import {UserContext} from '../context/UserContext'
@@ -33,6 +33,7 @@ function Profile() {
   const [state, dispatch] = useContext(UserContext)
   const [userData, setUserData] = useState(initialUser)
   
+  console.log(state)
   const users = localStorage.getItem('token')
 
   const navigate = useNavigate()
@@ -71,7 +72,7 @@ function Profile() {
                 <div className="d-flex mb-3 align-items-start">
                   <FaUserCircle className="text-danger me-3 fs-1" />
                   <div>
-                    <h5>{userData.fullname}</h5>
+                    <h5>{userData.fullname} {state.isAdmin && (<Badge className='ms-1' bg="secondary">Admin</Badge>)} </h5>
                     <p className="text-muted">Full Name</p>
                   </div>
                 </div>

@@ -9,7 +9,7 @@ import {API} from '../config/api'
 
 function SeriesContainer() {
 
-  let { data: films } = useQuery('moviesCache', async () => {
+  let { data: films } = useQuery('seriesCache', async () => {
     const response = await API.get('/films');
     console.log("response film", response)
 
@@ -46,7 +46,7 @@ function SeriesContainer() {
             )
           })}
         </Row>
-      </Container>
+        </Container>
     </div>
   );
 }

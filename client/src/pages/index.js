@@ -9,6 +9,8 @@ import ListFilm from './ListFilm';
 import IncomingTransaction from './IncomingTransaction'
 import AddFilm from '../components/AddMovie/AddFilm'
 import AddEpisode from '../components/AddEpisode/AddEpisode'
+import PrivateRoute from "../components/PrivateRoute";
+import NotAdmin from "./NotAdmin";
 
 export {
     Home, 
@@ -21,5 +23,7 @@ export {
     ListFilm, 
     IncomingTransaction, 
     AddFilm, 
-    AddEpisode
+    AddEpisode,
+    PrivateRoute,
+    NotAdmin
 }
