@@ -1,16 +1,14 @@
-import React from "react";
+import React, {useContext, useState, useEffect} from "react";
 import Logo from "../Images/logo.png";
-import "../App.css";
-import { useState } from "react";
 import ModalRegister from "./auth/ModalRegister";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import userPhoto from "../Images/user.png";
+import userProfile from "../Images/profil.jpg";
 import { Dropdown } from "react-bootstrap";
 import { FaUser, FaMoneyCheckAlt, FaSignOutAlt, FaVideo } from "react-icons/fa";
+import { TiThList } from "react-icons/ti";
 import { UserContext } from "../context/UserContext";
-import { useContext } from "react";
+import "../App.css";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -36,7 +34,7 @@ function Navbar() {
   }, [state, handleLogout]);
 
   return (
-    <nav className="navbar navbar-expand-lg bg-dark shadow sticky-top">
+    <nav className="navbar navbar-expand-lg bg-dark navbarshad sticky-top">
       <div className="container-fluid ">
         <button
           className="navbar-toggler bg-white"
@@ -80,7 +78,13 @@ function Navbar() {
             {isLogin ? (
               <Dropdown>
                 <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                  <img src={userPhoto} width={40} alt="user" />
+                  <img
+                    src={userProfile}
+                    width={40}
+                    height={40}
+                    style={{ borderRadius: "100%", objectFit: "cover" }}
+                    alt="user"
+                  />
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu variant="dark">
@@ -92,9 +96,14 @@ function Navbar() {
                     <FaMoneyCheckAlt className="text-danger ms-2" /> Pay
                   </Dropdown.Item>
                   {state.isAdmin && (
-                    <Dropdown.Item as={Link} to="/list-film">
-                      <FaVideo className="text-danger ms-2" /> Film
-                    </Dropdown.Item>
+                    <>
+                      <Dropdown.Item as={Link} to="/list-film">
+                        <FaVideo className="text-danger ms-2" /> Film
+                      </Dropdown.Item>
+                      <Dropdown.Item as={Link} to="/list-transaction">
+                        <TiThList className="text-danger ms-2" /> Transaction
+                      </Dropdown.Item>
+                    </>
                   )}
                   <Dropdown.Divider className="bg-light dropDivid" />
                   <Dropdown.Item href="#" onClick={handleLogout}>

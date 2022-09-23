@@ -5,7 +5,7 @@ import ModalRegister from "./auth/ModalRegister";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import userPhoto from "../Images/user.png";
+import userProfile from "../Images/profil.jpg";
 import { Dropdown } from "react-bootstrap";
 import {FaUser, FaMoneyCheckAlt, FaSignOutAlt, FaVideo} from 'react-icons/fa'
 import {UserContext} from '../context/UserContext'
@@ -36,7 +36,7 @@ function NavbarAdmin() {
 
 
   return (
-    <nav className="navbar navbar-expand-lg bg-dark shadow sticky-top">
+    <nav className="navbar navbar-expand-lg navbarshad sticky-top bg-dark">
       <div className="container-fluid ">
         <button
           className="navbar-toggler bg-white"
@@ -81,17 +81,10 @@ function NavbarAdmin() {
               <Dropdown>
                 <Button className="bg-transparent border-0" as={Link} to='/admin'></Button>
                 <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                  <img src={userPhoto} width={40} alt="user" />
+                  <img src={userProfile} width={40} height={40} style={{borderRadius: "100%", objectFit: "cover"}} alt="user" />
                 </Dropdown.Toggle>
               
                 <Dropdown.Menu variant="dark">
-                    {/* <Dropdown.Item as={Link} to='/profile'>
-                    <FaUser className="text-danger ms-2" /> 
-                    Profile
-                    </Dropdown.Item>
-                  <Dropdown.Item as={Link} to='/payment'>
-                   <FaMoneyCheckAlt className="text-danger ms-2"/> Pay
-                  </Dropdown.Item> */}
                   <Dropdown.Item as={Link} to='/list-film'>
                    <FaVideo className="text-danger ms-2"/> Film
                   </Dropdown.Item>

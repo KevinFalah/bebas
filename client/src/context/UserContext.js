@@ -1,6 +1,7 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 
 export const UserContext = createContext();
+
 
 const initialState = {
   isLogin: false,
@@ -10,6 +11,7 @@ const initialState = {
 
 function reducer(state, action) {
   const { type, payload } = action;
+
 
   switch (type) {
     case "AUTH_SUCCESS":
@@ -30,10 +32,11 @@ function reducer(state, action) {
       return {
         isLogin: false,
         isAdmin: false,
+        isLoading: false,
         user: {},
       };
-    default:
-      throw new Error();
+    // default:
+    //   throw new Error();
   }
 }
 

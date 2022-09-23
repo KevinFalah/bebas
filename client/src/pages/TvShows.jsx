@@ -1,8 +1,25 @@
 import React from "react";
 import SeriesContainer from "../components/SeriesContainer";
 import bgHero from '../Images/la-casa-de-papel-logo.png'
+import Loading from '../components/Loading'
+import { useEffect } from "react";
+import { useState } from "react";
 
 const TvShows = () => {
+  const [isLoading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+  }, [])
+
+  if(isLoading) {
+    return <Loading />
+  }
+
   return (
     <>
       <div>

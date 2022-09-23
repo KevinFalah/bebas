@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dumbflix/handlers"
+	"dumbflix/pkg/middleware"
 	"dumbflix/pkg/mysql"
 	"dumbflix/repositories"
 
@@ -15,4 +16,5 @@ func AuthRoutes(r *mux.Router) {
 
 	r.HandleFunc("/register", h.Register).Methods("POST")
 	r.HandleFunc("/login", h.Login).Methods("POST")
+	r.HandleFunc("/check-auth", middleware.Auth(h.CheckAuth)).Methods("GET")
 }

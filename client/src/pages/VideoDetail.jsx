@@ -1,25 +1,11 @@
 import React, { useEffect,useState } from "react";
-import dummyPeaky from '../Images/peakyblindersCard.jfif'
 import episode from '../Images/episode.jpg'
-import { Card } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import {API} from '../config/api'
 import { useQuery } from "react-query";
+import Loading from '../components/Loading'
 
 function VideoDetail() {
-
-  const [isLogin, setIsLogin] =useState(false)
-
-  // const navigate = useNavigate()
-  // const user = JSON.parse(localStorage.getItem('token'))
-
-  // useEffect(() => {
-  //   if(user) setIsLogin(true)
-  //   else {
-  //     setIsLogin(false)
-  //     navigate('/')
-  //   }
-  // }, [user])
 
   const {id} = useParams()
 
@@ -27,6 +13,20 @@ function VideoDetail() {
     const response = await API.get('/film/' + id);
     return response.data.data
   })
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
+  }, [])
+
+  if(isLoading) {
+    return <Loading />
+  }
 
   return (
     <>

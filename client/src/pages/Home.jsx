@@ -1,9 +1,22 @@
-import React from "react";
-import {Row, Container} from 'react-bootstrap'
+import React, {useState, useEffect} from "react";
 import MovieContainer from "../components/MovieContainer";
 import SeriesContainer from "../components/SeriesContainer";
+import Loading from '../components/Loading'
 
 function Home() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
+  }, [])
+
+  if(isLoading) {
+    return <Loading />
+  }
   return (
     <>
       <div>

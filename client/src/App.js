@@ -13,9 +13,8 @@ import {
   ListFilm,
   IncomingTransaction,
   AddFilm,
-  AddEpisode,
   PrivateRoute,
-  NotAdmin,
+  NotAdmin
 } from "./pages";
 import { API, setAuthToken } from "./config/api";
 import { useContext, useState } from "react";
@@ -32,14 +31,47 @@ function App() {
 
   const [isLogged, setIsLogged] = useState(false);
 
+  // useEffect(() => {
+  //   if (localStorage.token) {
+  //     setAuthToken(localStorage.token);
+  //   }
+
+  //   const isAdmin = state.isAdmin;
+  //   if (isAdmin) setIsLogged(true);
+  // }, [state]);
+
+  const checkUser = async () => {
+    try {
+      const response = await API.get("/check-auth");
+      // return console.log("response",response.data.data)
+      // If the token incorrect
+      if (response.status === 404) {
+        return dispatch({
+          type: "AUTH_ERROR",
+        });
+      }
+
+      // Get user data
+      let payload = response.data.data;
+      // Get token from local storage
+      payload.token = localStorage.token;
+
+      // Send data to useContext
+      dispatch({
+        type: "AUTH_SUCCESS",
+        payload,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (localStorage.token) {
-      setAuthToken(localStorage.token);
+      checkUser();
     }
+  }, []);
 
-    const isAdmin = state.isAdmin;
-    if (isAdmin) setIsLogged(true);
-  }, [state]);
 
   return (
     <Routes>
@@ -136,6 +168,15 @@ function App() {
           <Layout>
             <NotAdmin />
           </Layout>
+        }
+      />
+
+      <Route 
+        path='list-transaction' 
+        element={
+          <LayoutAdmin>
+            <IncomingTransaction />
+          </LayoutAdmin>
         }
       />
 

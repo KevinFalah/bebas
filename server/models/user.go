@@ -18,7 +18,7 @@ type User struct {
 
 type UserTransactionResponse struct {
 	ID        int                   `json:"id"`
-	FullName  string                `json:"fullName" gorm:"type: varchar(255)"`
+	Fullname  string                `json:"fullname" gorm:"type: varchar(255)"`
 	Email     string                `json:"email" gorm:"type: varchar(255)"`
 	Gender    string                `json:"gender" gorm:"type: varchar(100)"`
 	Phone     string                `json:"phone" gorm:"type: varchar(255)"`

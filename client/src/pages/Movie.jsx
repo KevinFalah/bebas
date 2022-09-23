@@ -1,8 +1,23 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import MoviesContainer from "../components/MovieContainer";
-import bgHero from '../Images/la-casa-de-papel-logo.png'
+import Loading from '../components/Loading'
+
 
 const Movie = () => {
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
+  }, [])
+
+  if(isLoading) {
+    return <Loading />
+  }
   return (
     <>
       <div>
